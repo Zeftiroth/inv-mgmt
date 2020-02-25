@@ -62,10 +62,41 @@ def warehouse_create():
 # def warehouse_index():
 #     store = Store.get_by_id(request.form['store_id'])
 
-
-@app.route("/warehouse/store_select", )
+@app.route("/stores")
 def store_select():
-    select_store = Store.select()
+    stores = Store.select()
+    warehouse = Warehouse.select()
+    return render_template('list_stores.html', stores=stores, warehouse=warehouse)
+
+
+@app.route("/stores/delete/<id>", methods=["POST"])
+def store_delete(id):
+    store = Store.get_by_id(id)
+    store.delete_instance(recursive=True)
+    # store_del = Store.delete().where(Store.id == id)
+    # store_del.execute()
+    return redirect(url_for('store_select'))
+
+
+@app.route("/store/<id>")
+def ind_store_select(id):
+    st = Store.get_or_none(Store.id == id)
+
+    if not st:
+        return redirect(url_for('show_store'))
+
+    return render_template('ind_store.html', st=st)
+    # return f"{id}"
+
+
+@app.route("/store/<id>/edit",  methods=["POST"])
+def store_edit(id):
+    ns = request.form.get("ns")
+
+    upd_store = Store.update(name=ns).where(Store.id == id)
+    upd_store.execute()
+
+    return redirect(url_for('ind_store_select', id=id))
 
 
 @app.cli.command()  # new

@@ -1,0 +1,25 @@
+{% extends "_layout.html" %} {% block content %}
+<h1>Store List</h1>
+<table style="width:50%">
+  <tr>
+    <th>Store Name</th>
+    <th>No. of Warehouse</th>
+  </tr>
+  {%for i in stores %}
+  <tr>
+    <td>{{i.name}}</td>
+    <td>{{i.warehouses | length}}</td>
+    <td>
+      <div class="form-group">
+        <form method="POST" action="{{url_for('store_delete',id=i.id)}}">
+          <button type="submit" class="btn btn-danger">
+            Delete
+          </button>
+        </form>
+      </div>
+    </td>
+  </tr>
+  {%endfor%}
+</table>
+
+{% endblock %}
